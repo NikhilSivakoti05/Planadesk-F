@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Premium E-commerce Design System */
+    --background: 30 20% 98%;
+    --foreground: 20 15% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 20 15% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 15% 12%;
+
+    --primary: 20 15% 12%;
+    --primary-foreground: 30 20% 98%;
+
+    --secondary: 30 15% 94%;
+    --secondary-foreground: 20 15% 12%;
+
+    --muted: 30 10% 92%;
+    --muted-foreground: 20 10% 45%;
+
+    --accent: 38 65% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 15% 88%;
+    --input: 30 15% 88%;
+    --ring: 38 65% 50%;
+
+    --radius: 0.75rem;
+
+    /* Custom Premium Colors */
+    --gold: 38 65% 50%;
+    --gold-light: 40 70% 65%;
+    --gold-dark: 35 60% 40%;
+    --charcoal: 20 15% 12%;
+    --charcoal-light: 20 12% 25%;
+    --cream: 30 20% 98%;
+    --cream-dark: 30 15% 92%;
+
+    /* Glass Effects */
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-border: 0 0% 100% / 0.3;
+    --glass-shadow: 0 0% 0% / 0.08;
+
+    /* Gradients */
+    --gradient-gold: linear-gradient(135deg, hsl(38 65% 50%), hsl(40 70% 60%));
+    --gradient-hero: linear-gradient(180deg, hsl(30 20% 98% / 0), hsl(30 20% 98%));
+    --gradient-dark: linear-gradient(135deg, hsl(20 15% 12%), hsl(20 12% 20%));
+
+    --sidebar-background: 30 20% 98%;
+    --sidebar-foreground: 20 15% 12%;
+    --sidebar-primary: 20 15% 12%;
+    --sidebar-primary-foreground: 30 20% 98%;
+    --sidebar-accent: 30 15% 94%;
+    --sidebar-accent-foreground: 20 15% 12%;
+    --sidebar-border: 30 15% 88%;
+    --sidebar-ring: 38 65% 50%;
+  }
+
+  .dark {
+    --background: 20 15% 8%;
+    --foreground: 30 20% 95%;
+
+    --card: 20 12% 12%;
+    --card-foreground: 30 20% 95%;
+
+    --popover: 20 12% 12%;
+    --popover-foreground: 30 20% 95%;
+
+    --primary: 30 20% 95%;
+    --primary-foreground: 20 15% 8%;
+
+    --secondary: 20 12% 18%;
+    --secondary-foreground: 30 20% 95%;
+
+    --muted: 20 10% 20%;
+    --muted-foreground: 30 10% 60%;
+
+    --accent: 38 65% 50%;
+    --accent-foreground: 20 15% 8%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 20 12% 20%;
+    --input: 20 12% 20%;
+    --ring: 38 65% 50%;
+
+    --gold: 38 65% 50%;
+    --gold-light: 40 70% 60%;
+    --gold-dark: 35 55% 40%;
+    --charcoal: 20 15% 8%;
+    --charcoal-light: 20 12% 15%;
+    --cream: 30 20% 95%;
+    --cream-dark: 30 15% 85%;
+
+    --glass-bg: 20 12% 15% / 0.8;
+    --glass-border: 30 20% 95% / 0.1;
+    --glass-shadow: 0 0% 0% / 0.3;
+
+    --gradient-gold: linear-gradient(135deg, hsl(38 65% 50%), hsl(40 70% 55%));
+    --gradient-hero: linear-gradient(180deg, hsl(20 15% 8% / 0), hsl(20 15% 8%));
+    --gradient-dark: linear-gradient(135deg, hsl(20 15% 8%), hsl(20 12% 4%));
+
+    --sidebar-background: 20 15% 8%;
+    --sidebar-foreground: 30 20% 95%;
+    --sidebar-primary: 38 65% 50%;
+    --sidebar-primary-foreground: 20 15% 8%;
+    --sidebar-accent: 20 12% 15%;
+    --sidebar-accent-foreground: 30 20% 95%;
+    --sidebar-border: 20 12% 20%;
+    --sidebar-ring: 38 65% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/30 shadow-lg;
+  }
+
+  .glass-dark {
+    @apply bg-black/20 backdrop-blur-xl border border-white/10;
+  }
+
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-accent to-gold-light bg-clip-text text-transparent;
+  }
+
+  .btn-premium {
+    @apply relative overflow-hidden bg-gradient-to-r from-accent to-gold-light text-white font-medium px-8 py-4 rounded-full transition-all duration-300 hover:shadow-xl hover:shadow-accent/25 hover:scale-105;
+  }
+
+  .btn-outline-premium {
+    @apply border-2 border-foreground/20 text-foreground px-8 py-4 rounded-full transition-all duration-300 hover:border-accent hover:text-accent hover:scale-105;
+  }
+
+  .card-premium {
+    @apply bg-card rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden;
+  }
+
+  .section-padding {
+    @apply px-6 md:px-12 lg:px-24 py-16 md:py-24;
+  }
+}
+
+@layer utilities {
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+}
