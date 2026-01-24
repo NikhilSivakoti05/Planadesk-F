@@ -12,7 +12,7 @@ const ProductList = () => {
   const { selectedCountry, isCountrySelected, formatPrice } = useCountry();
 
   useEffect(() => {
-    fetch("`${import.meta.env.VITE_API_BASE_URL}/api/products")
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products`)
       .then(res => res.json())
       .then(data => {
         const mapped = data.map(p => ({
