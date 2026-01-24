@@ -365,9 +365,6 @@ const ProductDetail = () => {
   const maxStock = product.globalStock || 0;
   const isAvailable = countryData && maxStock > 0;
 
-  /* ===============================
-     ADD TO CART HANDLER
-     =============================== */
   const handleAddToCart = () => {
     if (!loggedIn) {
       navigate("/login");
@@ -379,7 +376,7 @@ const ProductDetail = () => {
     addToCart(
       {
         ...product,
-        id: product._id || product.id, // ✅ normalize MongoDB id
+        id: product._id || product.id,
       },
       countryData,
       quantity
@@ -439,10 +436,37 @@ const ProductDetail = () => {
                 className="w-full h-full object-cover"
               />
             </div>
+
+            {product.images?.length > 1 && (
+              <div className="flex gap-3 mt-4 overflow-x-auto">
+                {product.images.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`h-20 w-20 flex-shrink-0 rounded-xl overflow-hidden border-2 transition
+                      ${selectedImage === index ? "border-accent" : "border-muted"}
+                    `}
+                  >
+                    <img
+                      src={img}
+                      alt={`${product.name}-${index}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="space-y-6">
             <h1 className="text-4xl font-bold">{product.name}</h1>
+
+            {/* ✅ ADDED PRODUCT DESCRIPTION */}
+            {product.description && (
+              <p className="text-muted-foreground leading-relaxed">
+                {product.description}
+              </p>
+            )}
 
             {selectedCountry && countryData && isAvailable && (
               <div className="text-4xl font-bold">
@@ -454,18 +478,14 @@ const ProductDetail = () => {
             <div className="flex items-center gap-4">
               <span>Quantity</span>
               <div className="flex items-center gap-3 bg-muted rounded-xl p-1">
-                <Button
-                  onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                >
+                <Button onClick={() => setQuantity(q => Math.max(1, q - 1))}>
                   <Minus />
                 </Button>
 
                 <span>{quantity}</span>
 
                 <Button
-                  onClick={() =>
-                    setQuantity(q => Math.min(maxStock, q + 1))
-                  }
+                  onClick={() => setQuantity(q => Math.min(maxStock, q + 1))}
                   disabled={!isAvailable || quantity >= maxStock}
                 >
                   <Plus />

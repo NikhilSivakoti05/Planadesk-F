@@ -72,7 +72,7 @@ const Header = () => {
           </nav>
 
           <div className="flex items-center gap-2">
-            <CountrySelector />
+            
 
             <Button variant="ghost" size="icon" className="hidden md:flex">
               <Search className="h-5 w-5" />
