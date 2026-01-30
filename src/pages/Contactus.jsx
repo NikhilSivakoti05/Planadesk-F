@@ -20,6 +20,8 @@ import * as LabelPrimitive from "@radix-ui/react-label";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { cva } from "class-variance-authority";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const cn = (...inputs) => twMerge(clsx(inputs));
 
@@ -405,6 +407,8 @@ const PremiumContactUs = () => {
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
+      <Header />
+      
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
         
@@ -440,10 +444,10 @@ const PremiumContactUs = () => {
       `}</style>
 
       {/* HERO SECTION */}
-      <section className="relative min-h-[70vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-white">
+      <section className="relative min-h-[70vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-white pt-16 sm:pt-20">
         <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-black/2" />
 
-        <div className="relative z-10 container mx-auto px-6 sm:px-8 lg:px-12 text-center">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 text-center">
           <motion.div
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -965,6 +969,8 @@ const PremiumContactUs = () => {
       <div id="faq">
         <PremiumFAQSection />
       </div>
+
+      <Footer />
     </div>
   );
 };

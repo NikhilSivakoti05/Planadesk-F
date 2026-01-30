@@ -20,6 +20,8 @@ import { Link } from "react-router-dom";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import bb6 from "/src/components/assets/planadeskimage6.png";
 import milestone1 from "/src/components/assets/milestone1.jpg";
 import milestone2 from "/src/components/assets/milestone2.jpg";
@@ -181,6 +183,8 @@ function AboutUs() {
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
+      <Header />
+      
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
         
@@ -218,7 +222,7 @@ function AboutUs() {
       {/* HERO SECTION */}
       <section
         ref={heroRef}
-        className="relative min-h-screen lg:h-screen flex items-center justify-center overflow-hidden"
+        className="relative min-h-screen lg:h-screen flex items-center justify-center overflow-hidden pt-16 sm:pt-20"
         style={{
           backgroundImage: `url(${bb6})`,
           backgroundSize: "cover",
@@ -228,12 +232,9 @@ function AboutUs() {
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
         
-        <div className="relative z-10 text-center px-6 sm:px-8 lg:px-12 max-w-5xl mx-auto w-full">
-          <div className="space-y-8 md:space-y-10">
-            <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 text-white px-6 py-3 rounded-none text-sm font-semibold animate-pulse">
-              <Target className="w-4 h-4" />
-              <span>Transforming Mobile Workspaces</span>
-            </div>
+        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 xl:px-12 max-w-6xl mx-auto w-full">
+          <div className="space-y-6 sm:space-y-8 md:space-y-10">
+            
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight" style={{ fontFamily: "var(--font-heading)" }}>
               Transforming
@@ -464,32 +465,34 @@ function AboutUs() {
 
       {/* DIALOG */}
       <Dialog open={!!selectedMilestone} onOpenChange={() => setSelectedMilestone(null)}>
-        <DialogContent className="max-w-4xl bg-white rounded-none border-2 border-black/10 max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-5xl bg-white rounded-none border-2 border-black/10 max-h-[90vh] overflow-y-auto p-0">
           {selectedMilestone && (
-            <>
-              <DialogHeader className="border-b border-black/10 pb-6">
-                <DialogTitle className="text-3xl font-bold text-black mb-2" style={{ fontFamily: "var(--font-heading)" }}>
-                  {selectedMilestone.title}
-                </DialogTitle>
-                <p className="text-black font-semibold text-sm" style={{ fontFamily: "var(--font-body)" }}>
-                  {selectedMilestone.year}
-                </p>
-              </DialogHeader>
+            <div className="flex flex-col lg:flex-row">
+              {/* Image Section - Left */}
+              <div className="w-full lg:w-2/5 flex-shrink-0 bg-black/5 overflow-hidden">
+                <img
+                  src={selectedMilestone.image}
+                  alt={selectedMilestone.title}
+                  className="w-full h-96 lg:h-full object-cover"
+                />
+              </div>
 
-              <div className="space-y-6 py-6">
-                <div className="relative h-64 bg-black/5 overflow-hidden rounded-none">
-                  <img
-                    src={selectedMilestone.image}
-                    alt={selectedMilestone.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                </div>
+              {/* Content Section - Right */}
+              <div className="w-full lg:w-3/5 p-6 md:p-8 lg:p-10 flex flex-col justify-center">
+                <DialogHeader className="border-b border-black/10 pb-6 mb-6 sm:border-b-0 sm:pb-0 sm:mb-6">
+                  <DialogTitle className="text-3xl md:text-4xl font-bold text-black mb-2" style={{ fontFamily: "var(--font-heading)" }}>
+                    {selectedMilestone.title}
+                  </DialogTitle>
+                  <p className="text-black font-semibold text-sm" style={{ fontFamily: "var(--font-body)" }}>
+                    {selectedMilestone.year}
+                  </p>
+                </DialogHeader>
 
-                <p className="text-lg text-black/70 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                <p className="text-base md:text-lg text-black/70 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
                   {selectedMilestone.detail}
                 </p>
               </div>
-            </>
+            </div>
           )}
         </DialogContent>
       </Dialog>
@@ -715,7 +718,7 @@ function AboutUs() {
           </div>
         </div>
       </section>
-    </div>
+      <Footer />    </div>
   );
 }
 

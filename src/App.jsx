@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import ScrollToTop from "./components/common/ScrollToTop.jsx";
 import { CountryProvider } from "./context/CountryContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 
@@ -36,6 +37,7 @@ const App = () => (
           <Sonner />
 
           <BrowserRouter>
+            <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/product/:id" element={<ProductDetail />} />
