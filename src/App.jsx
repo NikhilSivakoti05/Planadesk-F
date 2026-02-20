@@ -25,6 +25,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import PremiumContactUs from "./pages/Contactus.jsx";
 import AboutUs from "./pages/Aboutus.jsx";
 import Checkout from "./pages/Checkout.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 
 const queryClient = new QueryClient();
 
@@ -46,7 +47,8 @@ const App = () => (
               <Route path="/contactus" element={<PremiumContactUs />} />
               <Route path="/aboutus" element={<AboutUs />} />
               <Route path="/checkout" element={<Checkout/>} />
-
+              
+            <Route path="/reset-password" element={<ResetPassword/>} />   
               <Route
                 path="/cart"
                 element={
