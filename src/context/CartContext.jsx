@@ -6,9 +6,10 @@ const API = import.meta.env.VITE_API_BASE_URL;
 
 export const CartProvider = ({ children }) => {
   const [items, setItems] = useState([]);
+  const [ready, setReady] = useState(false); // 🔥 session ready flag
 
   /* =========================
-     LOAD CART
+     WAIT FOR SESSION
      ========================= */
   useEffect(() => {
     const loggedIn = localStorage.getItem("loggedIn") === "true";
@@ -16,6 +17,20 @@ export const CartProvider = ({ children }) => {
       setItems([]);
       return;
     }
+
+    // ⏳ give Spring Security time to restore session
+    const timer = setTimeout(() => {
+      setReady(true);
+    }, 300); // 300ms is enough
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  /* =========================
+     LOAD CART (AFTER READY)
+     ========================= */
+  useEffect(() => {
+    if (!ready) return;
 
     const load = async () => {
       try {
@@ -29,7 +44,7 @@ export const CartProvider = ({ children }) => {
     };
 
     load();
-  }, []);
+  }, [ready]);
 
   /* =========================
      ADD TO CART
