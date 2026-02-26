@@ -455,6 +455,7 @@ import OrdersView from './OrdersView';
 import UsersView from './UsersView';
 import SettingsView from './SettingsView';
 import CountryView from './CountryView';
+import SectionView from './SectionView';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -464,6 +465,7 @@ const AdminDashboard = () => {
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'products', label: 'Products', icon: Package },
     { id: 'country', label: 'Countries', icon: Flag },
+    { id: 'sections', label: 'Sections', icon: LayoutDashboard },
     { id: 'orders', label: 'Orders', icon: ShoppingCart },
     { id: 'users', label: 'Users', icon: Users },
     { id: 'settings', label: 'Settings', icon: Settings },
@@ -528,6 +530,7 @@ const AdminDashboard = () => {
         {activeTab === 'dashboard' && <DashboardView />}
         {activeTab === 'products' && <ProductsView />}
         {activeTab === 'country' && <CountryView />}
+        {activeTab === 'sections' && <SectionView />}
         {activeTab === 'orders' && <OrdersView />}
         {activeTab === 'users' && <UsersView />}
         {activeTab === 'settings' && <SettingsView />}

@@ -276,6 +276,270 @@
 
 
 
+// import { useState, useEffect } from "react";
+// import { useParams, Link, useNavigate } from "react-router-dom";
+// import {
+//   ArrowLeft,
+//   Heart,
+//   ShoppingBag,
+//   Minus,
+//   Plus,
+//   Shield,
+//   Truck,
+//   RefreshCw,
+// } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import Header from "@/components/layout/Header";
+// import Footer from "@/components/layout/Footer";
+// import { useCart } from "@/context/CartContext";
+
+// const currencyMap = {
+//   IN: "₹", US: "$", AE: "د.إ", UK: "£", EU: "€", CA: "$", AU: "$", NZ: "$",
+//   JP: "¥", CN: "¥", KR: "₩", SG: "$", MY: "RM", TH: "฿", ID: "Rp", PH: "₱",
+//   VN: "₫", PK: "₨", BD: "৳", LK: "Rs", NP: "Rs", MM: "Ks", KH: "៛", LA: "₭",
+//   SA: "﷼", QA: "﷼", KW: "د.ك", OM: "﷼", BH: ".د.ب", JO: "د.ا", IL: "₪",
+//   TR: "₺", IR: "﷼", IQ: "ع.د", SY: "£", YE: "﷼",
+//   RU: "₽", UA: "₴", PL: "zł", CZ: "Kč", HU: "Ft", RO: "lei", BG: "лв",
+//   SE: "kr", NO: "kr", DK: "kr", IS: "kr", CH: "CHF",
+//   DE: "€", FR: "€", IT: "€", ES: "€", PT: "€", NL: "€", BE: "€", AT: "€",
+//   IE: "€", GR: "€", FI: "€", EE: "€", LV: "€", LT: "€", SK: "€", SI: "€",
+//   HR: "€",
+//   BR: "R$", AR: "$", CL: "$", CO: "$", PE: "S/", MX: "$", VE: "Bs",
+//   BO: "Bs", PY: "₲", UY: "$U",
+//   ZA: "R", NG: "₦", GH: "₵", KE: "KSh", UG: "USh", TZ: "TSh",
+//   EG: "£", MA: "د.م.", DZ: "دج", TN: "د.ت", LY: "ل.د",
+//   ET: "Br", SD: "£", ZM: "ZK", ZW: "$",
+//   CM: "FCFA", SN: "CFA", CI: "CFA", BF: "CFA", ML: "CFA", NE: "CFA",
+//   RW: "FRw", BI: "FBu", DJ: "Fdj",
+//   TW: "NT$", HK: "$", MO: "P", MN: "₮",
+//   KZ: "₸", KG: "сом", TJ: "ЅМ", TM: "m"
+// };
+
+// const ProductDetail = () => {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+//   const { addToCart } = useCart();
+
+//   const [product, setProduct] = useState(null);
+//   const [countries, setCountries] = useState([]);
+//   const [selectedCountry, setSelectedCountry] = useState("");
+//   const [showCountryModal, setShowCountryModal] = useState(true);
+//   const [quantity, setQuantity] = useState(1);
+//   const [selectedImage, setSelectedImage] = useState(0);
+//   const [isWishlisted, setIsWishlisted] = useState(false);
+
+//   const loggedIn = localStorage.getItem("loggedIn") === "true";
+
+//   useEffect(() => {
+//     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products/${id}`)
+//       .then(res => res.json())
+//       .then(p =>
+//         setProduct({
+//           ...p,
+//           images: p.imageUrls || [],
+//         })
+//       );
+
+//     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/countries/active`)
+//       .then(r => r.json())
+//       .then(d => setCountries(d || []));
+//   }, [id]);
+
+//   useEffect(() => {
+//     setShowCountryModal(true);
+//     setSelectedCountry("");
+//     setQuantity(1);
+//   }, [id]);
+
+//   if (!product)
+//     return (
+//       <div className="h-screen flex items-center justify-center">
+//         Loading...
+//       </div>
+//     );
+
+//   const countryData = product.countryPrices?.find(
+//     c => c.countryCode === selectedCountry
+//   );
+
+//   const maxStock = product.globalStock || 0;
+//   const isAvailable = countryData && maxStock > 0;
+
+//   const handleAddToCart = () => {
+//     if (!loggedIn) {
+//       navigate("/login");
+//       return;
+//     }
+
+//     if (!isAvailable || !countryData) return;
+
+//     addToCart(
+//       {
+//         ...product,
+//         id: product._id || product.id,
+//       },
+//       countryData,
+//       quantity
+//     );
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-background">
+//       <Header />
+
+//       {showCountryModal && (
+//         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
+//           <div className="bg-card p-8 rounded-2xl w-full max-w-3xl">
+//             <div className="text-center mb-6">
+//               <h2 className="text-2xl font-bold">Select Your Region</h2>
+//               <p className="text-muted-foreground">
+//                 Choose your country to see local pricing and availability
+//               </p>
+//             </div>
+
+//             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto">
+//               {countries.map(c => (
+//                 <button
+//                   key={c.id}
+//                   onClick={() => {
+//                     setSelectedCountry(c.countryCode);
+//                     setShowCountryModal(false);
+//                   }}
+//                   className="border rounded-2xl p-4 text-left hover:border-accent transition"
+//                 >
+//                   <div className="text-xl font-bold">{c.countryCode}</div>
+//                   <div className="font-medium">{c.countryName}</div>
+//                   <div className="text-sm text-muted-foreground">
+//                     {currencyMap[c.countryCode] || ""} Currency
+//                   </div>
+//                 </button>
+//               ))}
+//             </div>
+//           </div>
+//         </div>
+//       )}
+
+//       <main className="pt-24 pb-16 max-w-7xl mx-auto px-4">
+//         <Link
+//           to="/"
+//           className="flex items-center gap-2 mb-6 text-muted-foreground hover:text-foreground"
+//         >
+//           <ArrowLeft className="h-4 w-4" /> Back
+//         </Link>
+
+//         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+//           <div>
+//             <div className="aspect-square rounded-3xl overflow-hidden bg-muted mb-4">
+//               <img
+//                 src={product.images[selectedImage]}
+//                 alt={product.name}
+//                 className="w-full h-full object-cover"
+//               />
+//             </div>
+
+//             {product.images?.length > 1 && (
+//               <div className="flex gap-3 mt-4 overflow-x-auto">
+//                 {product.images.map((img, index) => (
+//                   <button
+//                     key={index}
+//                     onClick={() => setSelectedImage(index)}
+//                     className={`h-20 w-20 flex-shrink-0 rounded-xl overflow-hidden border-2 transition
+//                       ${selectedImage === index ? "border-accent" : "border-muted"}
+//                     `}
+//                   >
+//                     <img
+//                       src={img}
+//                       alt={`${product.name}-${index}`}
+//                       className="w-full h-full object-cover"
+//                     />
+//                   </button>
+//                 ))}
+//               </div>
+//             )}
+//           </div>
+
+//           <div className="space-y-6">
+//             <h1 className="text-4xl font-bold">{product.name}</h1>
+
+//             {/* ✅ ADDED PRODUCT DESCRIPTION */}
+//             {product.description && (
+//               <p className="text-muted-foreground leading-relaxed">
+//                 {product.description}
+//               </p>
+//             )}
+
+//             {selectedCountry && countryData && isAvailable && (
+//               <div className="text-4xl font-bold">
+//                 {currencyMap[selectedCountry] || ""}
+//                 {countryData.price}
+//               </div>
+//             )}
+
+//             <div className="flex items-center gap-4">
+//               <span>Quantity</span>
+//               <div className="flex items-center gap-3 bg-muted rounded-xl p-1">
+//                 <Button onClick={() => setQuantity(q => Math.max(1, q - 1))}>
+//                   <Minus />
+//                 </Button>
+
+//                 <span>{quantity}</span>
+
+//                 <Button
+//                   onClick={() => setQuantity(q => Math.min(maxStock, q + 1))}
+//                   disabled={!isAvailable || quantity >= maxStock}
+//                 >
+//                   <Plus />
+//                 </Button>
+//               </div>
+//             </div>
+
+//             <div className="flex gap-4">
+//               <Button
+//                 disabled={!isAvailable || !loggedIn}
+//                 onClick={handleAddToCart}
+//                 className="flex-1 h-14 bg-accent text-accent-foreground"
+//               >
+//                 <ShoppingBag className="mr-2" />
+//                 {!loggedIn
+//                   ? "Login to Add"
+//                   : isAvailable
+//                   ? "Add to Cart"
+//                   : "Not Available"}
+//               </Button>
+
+//               <Button
+//                 variant="outline"
+//                 onClick={() => setIsWishlisted(!isWishlisted)}
+//               >
+//                 <Heart
+//                   className={isWishlisted ? "fill-accent text-accent" : ""}
+//                 />
+//               </Button>
+//             </div>
+
+//             <div className="grid grid-cols-3 gap-4 pt-6 border-t">
+//               <div className="text-center">
+//                 <Truck className="mx-auto text-accent" /> Free Shipping
+//               </div>
+//               <div className="text-center">
+//                 <RefreshCw className="mx-auto text-accent" /> 30-Day Returns
+//               </div>
+//               <div className="text-center">
+//                 <Shield className="mx-auto text-accent" /> Warranty
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </main>
+
+//       <Footer />
+//     </div>
+//   );
+// };
+
+// export default ProductDetail;
+
+
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
@@ -287,11 +551,16 @@ import {
   Shield,
   Truck,
   RefreshCw,
+  ChevronDown,
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { useCart } from "@/context/CartContext";
+import Section from "@/components/common/Section";
+
+const BASE = import.meta.env.VITE_API_BASE_URL;
 
 const currencyMap = {
   IN: "₹", US: "$", AE: "د.إ", UK: "£", EU: "€", CA: "$", AU: "$", NZ: "$",
@@ -315,7 +584,7 @@ const currencyMap = {
   KZ: "₸", KG: "сом", TJ: "ЅМ", TM: "m"
 };
 
-const ProductDetail = () => {
+export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -323,61 +592,53 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [showCountryModal, setShowCountryModal] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const loggedIn = localStorage.getItem("loggedIn") === "true";
 
+  /* ---------------- Load Product ---------------- */
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products/${id}`)
+    fetch(`${BASE}/api/products/${id}`)
       .then(res => res.json())
-      .then(p =>
+      .then(data =>
         setProduct({
-          ...p,
-          images: p.imageUrls || [],
+          ...data,
+          images: data.imageUrls || [],
         })
       );
 
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/countries/active`)
-      .then(r => r.json())
-      .then(d => setCountries(d || []));
+    fetch(`${BASE}/api/countries/active`)
+      .then(res => res.json())
+      .then(data => setCountries(data || []));
   }, [id]);
 
-  useEffect(() => {
-    setShowCountryModal(true);
-    setSelectedCountry("");
-    setQuantity(1);
-  }, [id]);
-
-  if (!product)
+  if (!product) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        Loading...
+      <div className="h-screen flex items-center justify-center text-muted-foreground">
+        Loading product…
       </div>
     );
+  }
 
+  /* ---------------- Pricing Logic ---------------- */
   const countryData = product.countryPrices?.find(
     c => c.countryCode === selectedCountry
   );
 
   const maxStock = product.globalStock || 0;
-  const isAvailable = countryData && maxStock > 0;
+  const isAvailable = !!countryData && maxStock > 0;
 
   const handleAddToCart = () => {
     if (!loggedIn) {
       navigate("/login");
       return;
     }
-
-    if (!isAvailable || !countryData) return;
+    if (!isAvailable) return;
 
     addToCart(
-      {
-        ...product,
-        id: product._id || product.id,
-      },
+      { ...product, id: product._id || product.id },
       countryData,
       quantity
     );
@@ -387,49 +648,21 @@ const ProductDetail = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {showCountryModal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
-          <div className="bg-card p-8 rounded-2xl w-full max-w-3xl">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold">Select Your Region</h2>
-              <p className="text-muted-foreground">
-                Choose your country to see local pricing and availability
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto">
-              {countries.map(c => (
-                <button
-                  key={c.id}
-                  onClick={() => {
-                    setSelectedCountry(c.countryCode);
-                    setShowCountryModal(false);
-                  }}
-                  className="border rounded-2xl p-4 text-left hover:border-accent transition"
-                >
-                  <div className="text-xl font-bold">{c.countryCode}</div>
-                  <div className="font-medium">{c.countryName}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {currencyMap[c.countryCode] || ""} Currency
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      <main className="pt-24 pb-16 max-w-7xl mx-auto px-4">
+      <main className="pt-28 pb-24 max-w-7xl mx-auto px-4">
+        {/* Back */}
         <Link
           to="/"
-          className="flex items-center gap-2 mb-6 text-muted-foreground hover:text-foreground"
+          className="inline-flex items-center gap-2 mb-10 text-sm text-muted-foreground hover:text-foreground transition"
         >
-          <ArrowLeft className="h-4 w-4" /> Back
+          <ArrowLeft className="h-4 w-4" /> Back to shop
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        {/* ================= PRODUCT HERO ================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+
+          {/* Images */}
           <div>
-            <div className="aspect-square rounded-3xl overflow-hidden bg-muted mb-4">
+            <div className="aspect-square rounded-[2rem] overflow-hidden bg-muted shadow-xl">
               <img
                 src={product.images[selectedImage]}
                 alt={product.name}
@@ -437,19 +670,21 @@ const ProductDetail = () => {
               />
             </div>
 
-            {product.images?.length > 1 && (
-              <div className="flex gap-3 mt-4 overflow-x-auto">
+            {product.images.length > 1 && (
+              <div className="flex gap-4 mt-6 overflow-x-auto pb-2">
                 {product.images.map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`h-20 w-20 flex-shrink-0 rounded-xl overflow-hidden border-2 transition
-                      ${selectedImage === index ? "border-accent" : "border-muted"}
+                    className={`h-20 w-20 rounded-xl overflow-hidden border-2 transition
+                      ${selectedImage === index
+                        ? "border-accent"
+                        : "border-transparent hover:border-muted"}
                     `}
                   >
                     <img
                       src={img}
-                      alt={`${product.name}-${index}`}
+                      alt=""
                       className="w-full h-full object-cover"
                     />
                   </button>
@@ -458,33 +693,60 @@ const ProductDetail = () => {
             )}
           </div>
 
-          <div className="space-y-6">
-            <h1 className="text-4xl font-bold">{product.name}</h1>
+          {/* Details */}
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-4xl lg:text-5xl font-serif font-bold leading-tight">
+                {product.name}
+              </h1>
 
-            {/* ✅ ADDED PRODUCT DESCRIPTION */}
-            {product.description && (
-              <p className="text-muted-foreground leading-relaxed">
-                {product.description}
-              </p>
-            )}
+              {product.description && (
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  {product.description}
+                </p>
+              )}
+            </div>
 
-            {selectedCountry && countryData && isAvailable && (
+            {/* Country Selector */}
+            <div className="max-w-xs">
+              <label className="text-sm font-medium text-muted-foreground">
+                Select Country
+              </label>
+              <div className="relative mt-2">
+                <select
+                  value={selectedCountry}
+                  onChange={(e) => setSelectedCountry(e.target.value)}
+                  className="w-full appearance-none rounded-2xl border border-muted bg-white px-4 py-3 pr-10 shadow-sm hover:shadow-md transition"
+                >
+                  <option value="">Choose Country</option>
+                  {countries.map(c => (
+                    <option key={c.id} value={c.countryCode}>
+                      {c.countryName} ({c.countryCode})
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-4 top-3.5 h-5 w-5 text-muted-foreground pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Price */}
+            {selectedCountry && countryData && (
               <div className="text-4xl font-bold">
                 {currencyMap[selectedCountry] || ""}
                 {countryData.price}
               </div>
             )}
 
-            <div className="flex items-center gap-4">
-              <span>Quantity</span>
+            {/* Quantity */}
+            <div className="flex items-center gap-6">
+              <span className="text-sm font-medium">Quantity</span>
               <div className="flex items-center gap-3 bg-muted rounded-xl p-1">
-                <Button onClick={() => setQuantity(q => Math.max(1, q - 1))}>
+                <Button size="icon" onClick={() => setQuantity(q => Math.max(1, q - 1))}>
                   <Minus />
                 </Button>
-
-                <span>{quantity}</span>
-
+                <span className="min-w-[24px] text-center">{quantity}</span>
                 <Button
+                  size="icon"
                   onClick={() => setQuantity(q => Math.min(maxStock, q + 1))}
                   disabled={!isAvailable || quantity >= maxStock}
                 >
@@ -493,22 +755,20 @@ const ProductDetail = () => {
               </div>
             </div>
 
+            {/* Actions */}
             <div className="flex gap-4">
               <Button
-                disabled={!isAvailable || !loggedIn}
+                disabled={!isAvailable}
                 onClick={handleAddToCart}
-                className="flex-1 h-14 bg-accent text-accent-foreground"
+                className="flex-1 h-14 text-lg bg-accent text-accent-foreground rounded-2xl"
               >
                 <ShoppingBag className="mr-2" />
-                {!loggedIn
-                  ? "Login to Add"
-                  : isAvailable
-                  ? "Add to Cart"
-                  : "Not Available"}
+                {isAvailable ? "Add to Cart" : "Not Available"}
               </Button>
 
               <Button
                 variant="outline"
+                className="h-14 w-14 rounded-2xl"
                 onClick={() => setIsWishlisted(!isWishlisted)}
               >
                 <Heart
@@ -517,24 +777,31 @@ const ProductDetail = () => {
               </Button>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t">
+            {/* Trust Badges */}
+            <div className="grid grid-cols-3 gap-6 pt-8 border-t text-sm">
               <div className="text-center">
-                <Truck className="mx-auto text-accent" /> Free Shipping
+                <Truck className="mx-auto text-accent mb-1" />
+                Free Shipping
               </div>
               <div className="text-center">
-                <RefreshCw className="mx-auto text-accent" /> 30-Day Returns
+                <RefreshCw className="mx-auto text-accent mb-1" />
+                30-Day Returns
               </div>
               <div className="text-center">
-                <Shield className="mx-auto text-accent" /> Warranty
+                <Shield className="mx-auto text-accent mb-1" />
+                Warranty
               </div>
             </div>
           </div>
+        </div>
+
+        {/* ================= SECTIONS ================= */}
+        <div className="mt-32 border-t pt-28">
+          <Section sectionNumbers={product.sections} />
         </div>
       </main>
 
       <Footer />
     </div>
   );
-};
-
-export default ProductDetail;
+}
