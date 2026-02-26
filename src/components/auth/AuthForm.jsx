@@ -835,6 +835,282 @@
 // };
 
 // ------------------  After Brevo --------------------------------
+// import { useState, useEffect, useRef } from "react";
+// import { useNavigate } from "react-router-dom";
+
+// const API = import.meta.env.VITE_API_BASE_URL;
+
+// export default function AuthForm() {
+//   const [mode, setMode] = useState("login"); // login | register | forgot
+//   const [loading, setLoading] = useState(false);
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [isMobile, setIsMobile] = useState(false);
+//   const abortRef = useRef(null);
+
+//   const [form, setForm] = useState({
+//     firstName: "",
+//     lastName: "",
+//     email: "",
+//     password: "",
+//   });
+
+//   const [message, setMessage] = useState("");
+//   const [error, setError] = useState("");
+//   const navigate = useNavigate();
+
+//   /* ---------- RESPONSIVE ---------- */
+//   useEffect(() => {
+//     const check = () => setIsMobile(window.innerWidth < 900);
+//     check();
+//     window.addEventListener("resize", check);
+//     return () => window.removeEventListener("resize", check);
+//   }, []);
+
+//   const change = (e) =>
+//     setForm({ ...form, [e.target.name]: e.target.value });
+
+//   /* ---------- SUBMIT ---------- */
+//   const submit = async (e) => {
+//     e.preventDefault();
+//     setError("");
+//     setMessage("");
+//     setLoading(true);
+
+//     if (abortRef.current) abortRef.current.abort();
+//     const controller = new AbortController();
+//     abortRef.current = controller;
+
+//     try {
+//       let endpoint = "/auth/login";
+//       let payload = {};
+
+//       if (mode === "register") {
+//         endpoint = "/auth/signup";
+//         payload = form;
+//       } else if (mode === "forgot") {
+//         endpoint = "/auth/forgot-password";
+//         payload = { email: form.email };
+//       } else {
+//         payload = { email: form.email, password: form.password };
+//       }
+
+//       const res = await fetch(`${API}${endpoint}`, {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         credentials: "include",
+//         body: JSON.stringify(payload),
+//         signal: controller.signal,
+//       });
+
+//       if (!res.ok) throw new Error();
+
+//       // ---------- FLOWS ----------
+//       if (mode === "register") {
+//         alert("Account created successfully. Please login.");
+//         setMode("login");
+//         return;
+//       }
+
+//       if (mode === "forgot") {
+//         setMessage(
+//           "If you have an account, a password reset email has been sent."
+//         );
+//         return;
+//       }
+
+//       const data = await res.json();
+
+//       localStorage.setItem("loggedIn", "true");
+//       localStorage.setItem("role", data.role);
+//       localStorage.setItem(
+//         "user",
+//         JSON.stringify({
+//           firstName: data.firstName,
+//           lastName: data.lastName,
+//           email: form.email,
+//         })
+//       );
+
+//       navigate("/dashboard/orders");
+//     } catch {
+//       if (mode === "forgot") {
+//         setMessage(
+//           "If you have an account, a password reset email has been sent."
+//         );
+//       } else {
+//         setError("Invalid email or password");
+//       }
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div style={styles.page}>
+//       <div style={styles.topBar}>
+//         <button style={styles.backButton} onClick={() => navigate("/")}>
+//           ← Back to Home
+//         </button>
+//       </div>
+
+//       <div
+//         style={{
+//           ...styles.container,
+//           flexDirection: isMobile ? "column" : "row",
+//         }}
+//       >
+//         {!isMobile && (
+//           <div style={styles.imageSection}>
+//             <div style={styles.overlay}>
+//               <h1 style={styles.imageTitle}>Welcome Back</h1>
+//               <p style={styles.imageText}>
+//                 Secure access to your dashboard and orders.
+//               </p>
+//             </div>
+//           </div>
+//         )}
+
+//         <div style={styles.formSection}>
+//           <div style={styles.card}>
+//             <h2 style={styles.title}>
+//               {mode === "login"
+//                 ? "Sign In"
+//                 : mode === "register"
+//                 ? "Create Account"
+//                 : "Forgot Password"}
+//             </h2>
+
+//             <form onSubmit={submit} style={styles.form}>
+//               {mode === "register" && (
+//                 <div style={styles.row}>
+//                   <input
+//                     style={styles.input}
+//                     name="firstName"
+//                     placeholder="First Name"
+//                     onChange={change}
+//                     required
+//                   />
+//                   <input
+//                     style={styles.input}
+//                     name="lastName"
+//                     placeholder="Last Name"
+//                     onChange={change}
+//                     required
+//                   />
+//                 </div>
+//               )}
+
+//               <input
+//                 style={styles.input}
+//                 name="email"
+//                 type="email"
+//                 placeholder="Email"
+//                 onChange={change}
+//                 required
+//               />
+
+//               {mode !== "forgot" && (
+//                 <div style={styles.passwordWrapper}>
+//                   <span
+//                     style={styles.eyeIcon}
+//                     onClick={() => setShowPassword(!showPassword)}
+//                   >
+//                     {showPassword ? <EyeOff /> : <Eye />}
+//                   </span>
+
+//                   <input
+//                     style={styles.passwordInput}
+//                     name="password"
+//                     type={showPassword ? "text" : "password"}
+//                     placeholder="Password"
+//                     onChange={change}
+//                     required
+//                   />
+//                 </div>
+//               )}
+
+//               {error && <div style={styles.error}>{error}</div>}
+//               {message && <div style={styles.success}>{message}</div>}
+
+//               <button type="submit" style={styles.button} disabled={loading}>
+//                 {loading
+//                   ? "Please wait..."
+//                   : mode === "login"
+//                   ? "Sign In"
+//                   : mode === "register"
+//                   ? "Sign Up"
+//                   : "Send Reset Email"}
+//               </button>
+//             </form>
+
+//             {mode === "login" && (
+//               <button
+//                 style={styles.forgot}
+//                 onClick={() => setMode("forgot")}
+//               >
+//                 Forgot password?
+//               </button>
+//             )}
+
+//             <button
+//               style={styles.toggle}
+//               onClick={() =>
+//                 setMode(
+//                   mode === "login"
+//                     ? "register"
+//                     : "login"
+//                 )
+//               }
+//             >
+//               {mode === "login"
+//                 ? "New here? Create an account"
+//                 : "Back to login"}
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// /* ---------- ICONS ---------- */
+// const Eye = () => (
+//   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+//     <circle cx="12" cy="12" r="3" stroke="#666" strokeWidth="2" />
+//   </svg>
+// );
+
+// const EyeOff = () => (
+//   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+//     <path d="M3 3l18 18" stroke="#666" strokeWidth="2" />
+//   </svg>
+// );
+
+// /* ---------- STYLES ---------- */
+// const styles = {
+//   page: { minHeight: "100vh", background: "#f5f7fb" },
+//   topBar: { padding: "16px 24px", background: "#fff" },
+//   backButton: { border: "none", background: "#1877f2", color: "#fff", padding: "10px 18px", borderRadius: "999px" },
+//   container: { display: "flex", minHeight: "calc(100vh - 64px)" },
+//   imageSection: { flex: 1, backgroundSize: "cover", display: "flex", alignItems: "center" },
+//   overlay: { background: "rgba(0,0,0,0.55)", padding: "60px", color: "#fff" },
+//   imageTitle: { fontSize: "38px", fontWeight: "800" },
+//   imageText: { fontSize: "16px" },
+//   formSection: { flex: 1, display: "flex", justifyContent: "center", alignItems: "center" },
+//   card: { width: "100%", maxWidth: "420px", background: "#fff", padding: "40px", borderRadius: "14px" },
+//   title: { fontSize: "26px", fontWeight: "700", textAlign: "center" },
+//   form: { display: "flex", flexDirection: "column", gap: "16px" },
+//   row: { display: "flex", gap: "10px" },
+//   input: { padding: "12px", borderRadius: "8px", border: "1px solid #ddd" },
+//   passwordWrapper: { position: "relative" },
+//   eyeIcon: { position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)" },
+//   passwordInput: { padding: "12px 12px 12px 42px", borderRadius: "8px", border: "1px solid #ddd" },
+//   button: { padding: "12px", borderRadius: "8px", border: "none", background: "#1877f2", color: "#fff" },
+//   error: { color: "#d32f2f", textAlign: "center", fontSize: "13px" },
+//   success: { color: "#2e7d32", textAlign: "center", fontSize: "13px" },
+//   forgot: { background: "none", border: "none", color: "#1877f2", cursor: "pointer" },
+//   toggle: { background: "none", border: "none", color: "#1877f2", cursor: "pointer" },
+// };
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -904,7 +1180,6 @@ export default function AuthForm() {
 
       if (!res.ok) throw new Error();
 
-      // ---------- FLOWS ----------
       if (mode === "register") {
         alert("Account created successfully. Please login.");
         setMode("login");
@@ -1011,13 +1286,6 @@ export default function AuthForm() {
 
               {mode !== "forgot" && (
                 <div style={styles.passwordWrapper}>
-                  <span
-                    style={styles.eyeIcon}
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff /> : <Eye />}
-                  </span>
-
                   <input
                     style={styles.passwordInput}
                     name="password"
@@ -1026,6 +1294,12 @@ export default function AuthForm() {
                     onChange={change}
                     required
                   />
+                  <span
+                    style={styles.eyeIcon}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff /> : <Eye />}
+                  </span>
                 </div>
               )}
 
@@ -1044,10 +1318,7 @@ export default function AuthForm() {
             </form>
 
             {mode === "login" && (
-              <button
-                style={styles.forgot}
-                onClick={() => setMode("forgot")}
-              >
+              <button style={styles.forgot} onClick={() => setMode("forgot")}>
                 Forgot password?
               </button>
             )}
@@ -1055,11 +1326,7 @@ export default function AuthForm() {
             <button
               style={styles.toggle}
               onClick={() =>
-                setMode(
-                  mode === "login"
-                    ? "register"
-                    : "login"
-                )
+                setMode(mode === "login" ? "register" : "login")
               }
             >
               {mode === "login"
@@ -1076,38 +1343,156 @@ export default function AuthForm() {
 /* ---------- ICONS ---------- */
 const Eye = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="3" stroke="#666" strokeWidth="2" />
+    <path
+      d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"
+      stroke="#555"
+      strokeWidth="2"
+    />
+    <circle cx="12" cy="12" r="3" stroke="#555" strokeWidth="2" />
   </svg>
 );
 
 const EyeOff = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-    <path d="M3 3l18 18" stroke="#666" strokeWidth="2" />
+    <path d="M3 3l18 18" stroke="#555" strokeWidth="2" />
   </svg>
 );
 
 /* ---------- STYLES ---------- */
 const styles = {
-  page: { minHeight: "100vh", background: "#f5f7fb" },
-  topBar: { padding: "16px 24px", background: "#fff" },
-  backButton: { border: "none", background: "#1877f2", color: "#fff", padding: "10px 18px", borderRadius: "999px" },
-  container: { display: "flex", minHeight: "calc(100vh - 64px)" },
-  imageSection: { flex: 1, backgroundSize: "cover", display: "flex", alignItems: "center" },
-  overlay: { background: "rgba(0,0,0,0.55)", padding: "60px", color: "#fff" },
-  imageTitle: { fontSize: "38px", fontWeight: "800" },
-  imageText: { fontSize: "16px" },
-  formSection: { flex: 1, display: "flex", justifyContent: "center", alignItems: "center" },
-  card: { width: "100%", maxWidth: "420px", background: "#fff", padding: "40px", borderRadius: "14px" },
-  title: { fontSize: "26px", fontWeight: "700", textAlign: "center" },
-  form: { display: "flex", flexDirection: "column", gap: "16px" },
-  row: { display: "flex", gap: "10px" },
-  input: { padding: "12px", borderRadius: "8px", border: "1px solid #ddd" },
-  passwordWrapper: { position: "relative" },
-  eyeIcon: { position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)" },
-  passwordInput: { padding: "12px 12px 12px 42px", borderRadius: "8px", border: "1px solid #ddd" },
-  button: { padding: "12px", borderRadius: "8px", border: "none", background: "#1877f2", color: "#fff" },
-  error: { color: "#d32f2f", textAlign: "center", fontSize: "13px" },
-  success: { color: "#2e7d32", textAlign: "center", fontSize: "13px" },
-  forgot: { background: "none", border: "none", color: "#1877f2", cursor: "pointer" },
-  toggle: { background: "none", border: "none", color: "#1877f2", cursor: "pointer" },
+  page: {
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #667eea, #764ba2)",
+  },
+  topBar: {
+    padding: "16px 24px",
+    background: "transparent",
+  },
+  backButton: {
+    border: "none",
+    background: "#ffffff",
+    color: "#333",
+    padding: "10px 18px",
+    borderRadius: "999px",
+    fontWeight: "600",
+    cursor: "pointer",
+  },
+  container: {
+    display: "flex",
+    minHeight: "calc(100vh - 64px)",
+  },
+  imageSection: {
+    flex: 1,
+    backgroundImage:
+      "url('https://images.unsplash.com/photo-1551434678-e076c223a692')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    display: "flex",
+    alignItems: "center",
+  },
+  overlay: {
+    background: "rgba(0,0,0,0.6)",
+    padding: "80px",
+    color: "#fff",
+    width: "100%",
+  },
+  imageTitle: {
+    fontSize: "42px",
+    fontWeight: "800",
+    marginBottom: "12px",
+  },
+  imageText: {
+    fontSize: "18px",
+    opacity: 0.9,
+  },
+  formSection: {
+    flex: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "24px",
+  },
+  card: {
+    width: "100%",
+    maxWidth: "420px",
+    background: "rgba(255,255,255,0.95)",
+    padding: "42px",
+    borderRadius: "18px",
+    boxShadow: "0 25px 50px rgba(0,0,0,0.15)",
+  },
+  title: {
+    fontSize: "28px",
+    fontWeight: "800",
+    textAlign: "center",
+    marginBottom: "24px",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+  },
+  row: {
+    display: "flex",
+    gap: "12px",
+  },
+  input: {
+    padding: "14px",
+    borderRadius: "10px",
+    border: "1px solid #ddd",
+    fontSize: "14px",
+    width: "100%",
+  },
+  passwordWrapper: {
+    position: "relative",
+  },
+  passwordInput: {
+    padding: "14px 46px 14px 14px",
+    borderRadius: "10px",
+    border: "1px solid #ddd",
+    width: "100%",
+    fontSize: "14px",
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: "14px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    cursor: "pointer",
+  },
+  button: {
+    padding: "14px",
+    borderRadius: "10px",
+    border: "none",
+    background: "linear-gradient(135deg, #667eea, #764ba2)",
+    color: "#fff",
+    fontWeight: "700",
+    cursor: "pointer",
+    fontSize: "15px",
+  },
+  error: {
+    color: "#d32f2f",
+    textAlign: "center",
+    fontSize: "13px",
+  },
+  success: {
+    color: "#2e7d32",
+    textAlign: "center",
+    fontSize: "13px",
+  },
+  forgot: {
+    background: "none",
+    border: "none",
+    color: "#667eea",
+    cursor: "pointer",
+    marginTop: "12px",
+    fontWeight: "600",
+  },
+  toggle: {
+    background: "none",
+    border: "none",
+    color: "#667eea",
+    cursor: "pointer",
+    marginTop: "14px",
+    fontWeight: "600",
+  },
 };
