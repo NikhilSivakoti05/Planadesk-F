@@ -542,6 +542,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+
 import {
   ArrowLeft,
   Heart,
@@ -796,7 +797,8 @@ export default function ProductDetail() {
         </div>
 
         {/* ================= SECTIONS ================= */}
-        <div className="mt-32 border-t pt-28">
+        {/* 🔥 Changed classes here from 'mt-32 pt-28' to 'mt-12 pt-12' 🔥 */}
+        <div className="border-t pt-2">
           <Section sectionNumbers={product.sections} />
         </div>
       </main>
