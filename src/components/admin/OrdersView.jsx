@@ -62,8 +62,14 @@ export default function OrdersView() {
             </div>
 
             <div className="text-sm text-gray-600">
-              📍 {o.address?.city}, {o.address?.country}
-            </div>
+  📍 {[
+    o.address?.street,
+    o.address?.city,
+    o.address?.state,
+    o.address?.pincode,
+    o.address?.country
+  ].filter(Boolean).join(", ")}
+</div>
 
             <div className="flex justify-between items-center">
               <p className="text-lg font-bold">₹{o.totalAmount}</p>
