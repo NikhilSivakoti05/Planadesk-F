@@ -89,7 +89,7 @@ const Header = () => {
                 className={`text-sm font-medium transition-colors ${
                   shouldBeScrolled
                     ? "text-gray-700 hover:text-black"
-                    : "text-white/90 hover:text-white drop-shadow-lg"
+                     : "text-gray-700 hover:text-black"
                 }`}
               >
                 {link.label}
@@ -106,7 +106,7 @@ const Header = () => {
                   className={`hidden md:flex h-12 w-12 rounded-full transition-all duration-200 ${
                     shouldBeScrolled
                       ? "text-gray-700 hover:bg-gray-100 hover:text-black hover:scale-105"
-                      : "text-white/90 hover:text-white hover:bg-white/20 hover:scale-105 drop-shadow-lg"
+                      : "text-gray-700 hover:text-white hover:bg-white/20 hover:scale-105 drop-shadow-lg"
                   }`}
                 >
                   <LayoutDashboard className="h-6 w-6" />
@@ -121,7 +121,7 @@ const Header = () => {
               className={`h-12 w-12 rounded-full transition-all duration-200 ${
                 shouldBeScrolled
                   ? "text-gray-700 hover:bg-gray-100 hover:text-black hover:scale-105"
-                  : "text-white/90 hover:text-white hover:bg-white/20 hover:scale-105 drop-shadow-lg"
+                  : "text-gray-700 hover:text-white hover:bg-white/20 hover:scale-105 drop-shadow-lg"
               }`}
             >
               <User className="h-6 w-6" />
@@ -134,7 +134,7 @@ const Header = () => {
                 className={`hidden sm:inline-flex text-sm font-medium px-4 py-2 h-12 rounded-full transition-all duration-200 ${
                   shouldBeScrolled
                     ? "text-gray-700 hover:bg-gray-100 hover:text-black hover:scale-105"
-                    : "text-white/90 hover:text-white hover:bg-white/20 hover:scale-105 drop-shadow-lg"
+                    : "text-gray-700 hover:text-white hover:bg-white/20 hover:scale-105 drop-shadow-lg"
                 }`}
               >
                 Logout
@@ -148,7 +148,7 @@ const Header = () => {
               className={`relative h-12 w-12 rounded-full transition-all duration-200 ${
                 shouldBeScrolled
                   ? "text-gray-700 hover:bg-gray-100 hover:text-black hover:scale-105"
-                  : "text-white/90 hover:text-white hover:bg-white/20 hover:scale-105 drop-shadow-lg"
+                  : "text-gray-700 hover:text-white hover:bg-white/20 hover:scale-105 drop-shadow-lg"
               }`}
             >
               <ShoppingBag className="h-6 w-6" />
@@ -165,7 +165,7 @@ const Header = () => {
               className={`lg:hidden h-12 w-12 ml-1 rounded-full transition-all duration-200 ${
                 shouldBeScrolled
                   ? "text-gray-700 hover:bg-gray-100 hover:text-black hover:scale-105"
-                  : "text-white/90 hover:text-white hover:bg-white/20 hover:scale-105 drop-shadow-lg"
+                  : "text-gray-700 hover:text-white hover:bg-white/20 hover:scale-105 drop-shadow-lg"
               }`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
@@ -201,7 +201,7 @@ const Header = () => {
                   className={`block text-sm font-medium transition-colors py-2 ${
                     shouldBeScrolled
                       ? "text-gray-700 hover:text-black"
-                      : "text-white/90 hover:text-white"
+                      : "text-gray-700 hover:text-white"
                   }`}
                 >
                   {link.label}
@@ -215,7 +215,7 @@ const Header = () => {
                   className={`flex items-center gap-2 text-sm font-medium transition-colors py-2 ${
                     shouldBeScrolled
                       ? "text-gray-700 hover:text-black"
-                      : "text-white/90 hover:text-white"
+                      : "text-gray-700 hover:text-white"
                   }`}
                 >
                   <LayoutDashboard className="h-5 w-5" /> Admin Dashboard

@@ -338,56 +338,36 @@ const PlanADeskHomepage = () => {
       <Header />
 
       {/* ═════ HERO SECTION (VIDEO ONLY) ═════ */}
-      <section className="relative h-[90vh] md:h-screen w-full overflow-hidden bg-white ">
-        {/* Background Video */}
-        <div className="absolute inset-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            onLoadedData={() => setHeroVideoLoaded(true)}
-            className={`absolute inset-0 w-full h-full object-cover z-0 pointer-events-none transition-opacity duration-1000 ${
-              isHeroVideoLoaded ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <source src={video} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          {/* Fallback gradient while loading */}
-          {!isHeroVideoLoaded && (
-            <div className="absolute inset-0 bg-white" />
-          )}
-        </div>
+      <section className="h-screen flex items-center justify-center bg-gradient-to-r from-white via-gray-100 to-white">
 
-        {/* Elegant Overlay - Subtle */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/20 via-transparent to-white/40" />
-
-        {/* Book Now Floating Button (Bottom Right) - Premium Styling */}
+  <h1 className="text-6xl md:text-8xl font-semibold tracking-[0.28em] text-gray-800">
+    PLANADESK
+  </h1>
+   {/* Book Now Floating Button (Bottom Right) - Premium Styling */}
         <div className="absolute bottom-8 right-8 md:bottom-12 md:right-12 z-30">
-          <motion.button
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
-            whileHover={{ scale: 1.08, y: -3 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={() => setModalOpen(true)}
-            className="group relative px-10 py-4 font-semibold transition-all duration-500"
-            style={{
-              fontFamily: "var(--font-body)",
-              fontSize: "0.875rem",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              backgroundColor: "#000000",
-              border: "2px solid #000000",
-              color: "#ffffff",
-            }}
-          >
-            Book Now
-          </motion.button>
-        </div>
-      </section>
+  <motion.button
+    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
+    whileHover={{ scale: 1.08, y: -3 }}
+    whileTap={{ scale: 0.96 }}
+    onClick={() => navigate("/all-products")}
+    className="group relative px-10 py-4 font-semibold transition-all duration-500"
+    style={{
+      fontFamily: "var(--font-body)",
+      fontSize: "0.875rem",
+      letterSpacing: "0.08em",
+      textTransform: "uppercase",
+      backgroundColor: "#000000",
+      border: "2px solid #000000",
+      color: "#ffffff",
+    }}
+  >
+    Book Now
+  </motion.button>
+</div>
 
+</section>
       {/* ═════ COUNTRY SELECTOR MODAL ═════ */}
       <AnimatePresence>
         {modalOpen && (
@@ -549,7 +529,7 @@ const PlanADeskHomepage = () => {
               <motion.button
                 whileHover={{ scale: 1.06, y: -2 }}
                 whileTap={{ scale: 0.96 }}
-                onClick={() => setModalOpen(true)}
+                
                 className="w-full max-w-md py-5 bg-black text-white font-semibold rounded-none shadow-lg hover:shadow-2xl flex items-center justify-center gap-3 transition-all duration-300 group"
                 style={{
                   fontFamily: "var(--font-body)",
@@ -561,65 +541,7 @@ const PlanADeskHomepage = () => {
               </motion.button>
             </motion.div>
 
-            {/* ================= RIGHT VIDEO ================= */}
-            <motion.div
-              ref={videoContainerRef}
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9 }}
-              className="relative flex justify-center"
-            >
-              <div className="relative w-full max-w-md aspect-square rounded-none overflow-hidden shadow-2xl border border-black/10 bg-black">
-                <video
-                  key={current}
-                  src={videos[current]}
-                  autoPlay
-                  loop
-                  muted
-                  className="w-full h-full object-cover"
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-
-                {/* Controls */}
-                <div className="absolute inset-0 flex items-center justify-between px-6">
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={prevVideo}
-                    className="w-12 h-12 bg-white/20 backdrop-blur border border-white/40 rounded-full flex items-center justify-center hover:bg-white/30 transition-all"
-                  >
-                    <ChevronLeft className="w-6 h-6 text-white" />
-                  </motion.button>
-
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={nextVideo}
-                    className="w-12 h-12 bg-white/20 backdrop-blur border border-white/40 rounded-full flex items-center justify-center hover:bg-white/30 transition-all"
-                  >
-                    <ChevronRight className="w-6 h-6 text-white" />
-                  </motion.button>
-                </div>
-
-                {/* Indicators */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-                  {videos.map((_, index) => (
-                    <motion.button
-                      key={index}
-                      onClick={() => setCurrent(index)}
-                      className={`rounded-full transition-all ${
-                        current === index
-                          ? "w-8 h-2 bg-white"
-                          : "w-2 h-2 bg-white/50 hover:bg-white/70"
-                      }`}
-                      whileHover={{ scale: 1.2 }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+            
 
           </div>
         </div>
@@ -769,7 +691,7 @@ const PlanADeskHomepage = () => {
             <motion.button
               whileHover={{ scale: 1.08, y: -3 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setModalOpen(true)}
+              
               className="inline-flex items-center gap-3 px-12 py-5 bg-black text-white font-semibold rounded-none shadow-lg hover:shadow-2xl transition-all duration-300 group"
               style={{
                 fontFamily: "var(--font-body)",
